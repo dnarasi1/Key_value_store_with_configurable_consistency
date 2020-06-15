@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+enum Consistency {
+     ONE = 0;
+     QUORUM = 1;
+}
+
+message Err {
+  string err = 1;
+}
+
+message Put {
+    int32 id = 1;  // node id
+    uint32 key = 2;
+    string value = 3;
+    Consistency consistencylevel = 4; 
+}
+
+message Get {
+    int32 id = 1;
+    uint32 key = 2;
+    Consistency consistencylevel = 3;
+}
+
+message PutResponse{
+  int32 id = 1;
+  uint32 key = 2;
+  string status = 3;
+}
+
+message GetResponseLst{
+    message GetResponse {
+        int32 id = 1;
+        string value = 2;
+        string version = 3;
+    }
+    repeated GetResponse response = 1;
+}
+
+message Msg {
+  oneof msg {
+    Get Get = 1;
+    Put Put = 2;
+    PutResponse PutRequest = 3;
+    GetResponseLst GetRequestLst = 4;
+    Err err = 5;
+  }
+}
